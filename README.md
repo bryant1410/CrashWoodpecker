@@ -14,8 +14,8 @@ In your `build.gradle`:
 
 ```gradle
 dependencies {
-  debugCompile 'me.drakeet.library:crashwoodpecker:0.9.81'
-  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.7'
+  debugCompile 'me.drakeet.library:crashwoodpecker:0.9.83'
+  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.83'
 }
 ```
 
@@ -26,8 +26,8 @@ public class ExampleApplication extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    CrashWoodpecker.fly().to(this);
-    // CrashWoodpecker.fly(true /* forceHandleByOrigin */).to(this);
+    CrashWoodpecker.init(this);
+    // CrashWoodpecker.init(this, true /* forceHandleByOrigin */);
   }
 }
 ```
@@ -60,7 +60,9 @@ If you like my open source projects, you can follow me: https://github.com/drake
 
 Great Square: http://square.github.io
 
-markzhai (contributor): https://github.com/markzhai
+markzhai: https://github.com/markzhai
+
+jug6ernaut: https://github.com/jug6ernaut
 
 License
 ============
