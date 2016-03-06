@@ -8,8 +8,6 @@ An uncaught exception handler library like Square's [LeakCanary](https://github.
 
 ## Getting started
 
-**NOTE: There is a big bug before VERSION 0.9.5, QAQ thank goodness, it has been fixed in version 0.9.5, please update to 0.9.5+**
-
 In your `build.gradle`:
 
 ```gradle
@@ -48,6 +46,14 @@ And in your `AndroidManifest.xml` file:
 
 * Save logs and to reload.
 
+## Thanks
+
+Great Square: http://square.github.io
+
+markzhai: https://github.com/markzhai
+
+jug6ernaut: https://github.com/jug6ernaut
+
 ## About me
 
 I am a student in China, I love reading pure literature, love Japanese culture and Hongkong music. At the same time, I am also obsessed with writing code. If you have any questions or want to make friends with me, you can write to me: drakeet.me@gmail.com
@@ -56,13 +62,6 @@ In addition, my blog: http://drakeet.me
 
 If you like my open source projects, you can follow me: https://github.com/drakeet
 
-## Thanks
-
-Great Square: http://square.github.io
-
-markzhai: https://github.com/markzhai
-
-jug6ernaut: https://github.com/jug6ernaut
 
 License
 ============
