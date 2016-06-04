@@ -26,16 +26,8 @@
 
 <resources>
 
-    <style name="Theme.Pecker" parent="Base.Theme.Pecker">
-        <item name="android:background">@color/windowBackground</item>
-    </style>
-
     <style name="Base.Theme.Pecker"
-        parent="android:Theme.Black">
-    </style>
-
-    <style name="LineTextAppearance">
-        <item name="android:textColor">@color/my_fault</item>
+        parent="android:Theme.Holo.Light.DarkActionBar">
     </style>
 
 </resources>
