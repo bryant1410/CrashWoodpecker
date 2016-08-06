@@ -216,12 +216,13 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         intent.setClass(mContext, CatchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         String[] strings = traces.split("\n");
-        String[] newStrings = new String[strings.length];
+        String[] logs = new String[strings.length];
         for (int i = 0; i < strings.length; i++) {
-            newStrings[i] = strings[i].trim();
+            logs[i] = strings[i].trim();
         }
         intent.putExtra(CatchActivity.EXTRA_PACKAGE, mContext.getPackageName());
-        intent.putExtra(CatchActivity.EXTRA_CRASH_LOGS, newStrings);
+        intent.putExtra(CatchActivity.EXTRA_CRASH_LOGS, logs);
+        intent.putExtra(CatchActivity.EXTRA_CRASH_4_LOGCAT, Log.getStackTraceString(throwable));
         mContext.startActivity(intent);
     }
 

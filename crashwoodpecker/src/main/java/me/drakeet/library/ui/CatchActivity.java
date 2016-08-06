@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import me.drakeet.library.R;
@@ -42,11 +43,12 @@ import me.drakeet.library.R;
 public class CatchActivity extends Activity {
 
     public final static String EXTRA_CRASH_LOGS = "extra_crash_logs";
+    public final static String EXTRA_CRASH_4_LOGCAT = "extra_crash_4_logcat";
     public final static String EXTRA_PACKAGE = "extra_package";
     private RecyclerView mRecyclerView;
     CrashListAdapter mCrashListAdapter;
     private String[] mCrashArray = {"Cause by 1", "At 2"};
-    private String mPackageName;
+    private String mPackageName, mLog4Cat;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,7 @@ public class CatchActivity extends Activity {
 
     private void parseIntent() {
         mCrashArray = getIntent().getStringArrayExtra(EXTRA_CRASH_LOGS);
+        mLog4Cat = getIntent().getStringExtra(EXTRA_CRASH_4_LOGCAT);
         mPackageName = getIntent().getStringExtra(EXTRA_PACKAGE);
     }
 
@@ -68,6 +71,7 @@ public class CatchActivity extends Activity {
         mRecyclerView.setLayoutManager(layoutManager);
         mCrashListAdapter = new CrashListAdapter(mCrashArray, mPackageName);
         mRecyclerView.setAdapter(mCrashListAdapter);
+        Log.e("CrashWoodpecker", mLog4Cat);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
