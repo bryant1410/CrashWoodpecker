@@ -1,19 +1,21 @@
-[![GitHub release](https://img.shields.io/badge/sample%20apk-0.9.6-brightgreen.svg?style=flat)](https://github.com/drakeet/CrashWoodpecker/releases/download/0.9.6/LittleWood.apk) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker)
+[![GitHub release](https://img.shields.io/badge/sample%20apk-0.9.6-brightgreen.svg?style=flat)](https://github.com/drakeet/CrashWoodpecker/releases/download/0.9.6/LittleWood.apk) 
 
 #CrashWoodpecker
 
-An uncaught exception handler library like Square's [LeakCanary](https://github.com/square/leakcanary).
+An uncaught exception handler library like Square's [LeakCanary](https://github.com/square/leakcanary). Support showing logs both on Logcat & Woodpecker.
 
 ![screenshot.png](art/s2.png)
 
 ## Getting started
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker)
+
 In your `build.gradle`:
 
 ```gradle
 dependencies {
-  debugCompile 'me.drakeet.library:crashwoodpecker:0.9.83'
-  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.83'
+  debugCompile 'me.drakeet.library:crashwoodpecker:1.1'
+  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:1.1'
 }
 ```
 
