@@ -1,4 +1,4 @@
-[![GitHub release](https://img.shields.io/badge/sample%20apk-0.9.6-brightgreen.svg?style=flat)](https://github.com/drakeet/CrashWoodpecker/releases/download/0.9.6/LittleWood.apk) 
+[![GitHub release](https://img.shields.io/badge/sample%20apk-v1.1-brightgreen.svg?style=flat)](https://github.com/drakeet/CrashWoodpecker/releases/download/v1.1/LittleWood.apk) 
 
 #CrashWoodpecker
 
