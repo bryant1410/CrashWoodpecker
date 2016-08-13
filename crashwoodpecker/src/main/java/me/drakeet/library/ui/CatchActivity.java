@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +61,7 @@ public class CatchActivity extends Activity {
 
     private void parseIntent() {
         mCrashArray = getIntent().getStringArrayExtra(EXTRA_CRASH_LOGS);
+        // TODO: 16/8/13 reload from files
         mLog4Cat = getIntent().getStringExtra(EXTRA_CRASH_4_LOGCAT);
         mPackageName = getIntent().getStringExtra(EXTRA_PACKAGE);
     }
@@ -71,7 +73,9 @@ public class CatchActivity extends Activity {
         mRecyclerView.setLayoutManager(layoutManager);
         mCrashListAdapter = new CrashListAdapter(mCrashArray, mPackageName);
         mRecyclerView.setAdapter(mCrashListAdapter);
-        Log.e("CrashWoodpecker", mLog4Cat);
+        if (!TextUtils.isEmpty(mLog4Cat)) {
+            Log.e("CrashWoodpecker", mLog4Cat);
+        }
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
