@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -48,8 +49,9 @@ public class CatchActivity extends Activity {
     public final static String EXTRA_PACKAGE = "extra_package";
     private RecyclerView mRecyclerView;
     CrashListAdapter mCrashListAdapter;
-    private String[] mCrashArray = {"Cause by 1", "At 2"};
+    private String[] mCrashArray = { "Cause by 1", "At 2" };
     private String mPackageName, mLog4Cat;
+
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,12 +61,14 @@ public class CatchActivity extends Activity {
         setUpRecyclerView();
     }
 
+
     private void parseIntent() {
         mCrashArray = getIntent().getStringArrayExtra(EXTRA_CRASH_LOGS);
         // TODO: 16/8/13 reload from files
         mLog4Cat = getIntent().getStringExtra(EXTRA_CRASH_4_LOGCAT);
         mPackageName = getIntent().getStringExtra(EXTRA_PACKAGE);
     }
+
 
     private void setUpRecyclerView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_crash);
@@ -78,15 +82,16 @@ public class CatchActivity extends Activity {
         }
     }
 
+
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(R.string.by_drakeet)
-                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override public boolean onMenuItemClick(MenuItem item) {
-                        Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse("http://drakeet.me"));
-                        startActivity(it);
-                        return true;
-                    }
-                });
+        menu.add(Html.fromHtml("<font color='#ffffff'>drakeet</font>"))
+            .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override public boolean onMenuItemClick(MenuItem item) {
+                    Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse("http://drakeet.me"));
+                    startActivity(it);
+                    return true;
+                }
+            });
         return true;
     }
 }

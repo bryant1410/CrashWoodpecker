@@ -24,7 +24,7 @@
   ~ SOFTWARE.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Pecker" parent="Base.Theme.Pecker">
         <item name="android:background">@color/windowBackground</item>
