@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ The MIT License (MIT)
   ~
   ~ Copyright (c) 2015 drakeet (drakeet.me@gmail.com)
@@ -26,14 +25,14 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_item_crash"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:minHeight="36dp"
-    android:gravity="center_vertical">
+    android:background="@drawable/bg_item_crash">
 
     <android.support.v4.widget.Space
         android:id="@+id/space"
@@ -41,10 +40,10 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/tv_trace"
-        android:layout_weight="1"
+        android:id="@+id/trace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:background="@color/item_crash"
         android:textColor="@color/trace_text"
         tools:text="123, 123"/>

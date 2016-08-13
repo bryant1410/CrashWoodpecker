@@ -55,7 +55,7 @@ public class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.View
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_crash_cat, parent, false);
+                .inflate(R.layout.item_trace, parent, false);
         return new ViewHolder(v);
     }
 
@@ -120,7 +120,7 @@ public class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.View
 
         public ViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.tv_trace);
+            title = (TextView) itemView.findViewById(R.id.trace);
             space = (Space) itemView.findViewById(R.id.space);
             itemView.setOnClickListener(this);
         }

@@ -71,7 +71,7 @@ public class CatchActivity extends Activity {
 
 
     private void setUpRecyclerView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_crash);
+        mRecyclerView = (RecyclerView) findViewById(R.id.crashes);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
