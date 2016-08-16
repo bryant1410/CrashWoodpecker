@@ -33,15 +33,50 @@ import android.content.Context;
  * Date: 9/6/15 13:40
  */
 @SuppressWarnings("unused")
-public class CrashWoodpecker {
+public class CrashWoodpecker implements Thread.UncaughtExceptionHandler {
+
+    public static CrashWoodpecker flyTo(Application application, boolean forceHandleByOrigin) {
+        return new CrashWoodpecker(application, forceHandleByOrigin);
+    }
+
+
+    public static CrashWoodpecker flyTo(Application application) {
+        return new CrashWoodpecker(application, false);
+    }
+
 
     public static CrashWoodpecker init(Application application, boolean forceHandleByOrigin) {
         return new CrashWoodpecker(application, forceHandleByOrigin);
     }
 
+
     public static CrashWoodpecker init(Application application) {
         return new CrashWoodpecker(application, false);
     }
 
+
+    public void deleteLogs() {
+    }
+
+
+    public void deleteLogs(final long timeout) {
+    }
+
+
     private CrashWoodpecker(Context context, boolean forceHandleByOrigin) { }
+
+
+    @Override public void uncaughtException(Thread thread, Throwable ex) {
+
+    }
+
+
+    public void setInterceptor(UncaughtExceptionInterceptor interceptor) {
+    }
+
+
+    public interface UncaughtExceptionInterceptor {
+        boolean onInterceptExceptionBefore(Thread t, Throwable ex);
+        boolean onInterceptExceptionAfter(Thread t, Throwable ex);
+    }
 }
