@@ -68,6 +68,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     private final Context mContext;
     private final String mVersion;
 
+
     /**
      * Install CrashWoodpecker.
      *
@@ -77,9 +78,10 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
      * by default false.
      * @return CrashWoodpecker instance.
      */
-    public static CrashWoodpecker init(Application application, boolean forceHandleByOrigin) {
+    public static CrashWoodpecker flyTo(Application application, boolean forceHandleByOrigin) {
         return new CrashWoodpecker(application, forceHandleByOrigin);
     }
+
 
     /**
      * Install CrashWoodpecker.
@@ -87,14 +89,43 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
      * @param application to capture exceptions for.
      * @return CrashWoodpecker instance.
      */
-    public static CrashWoodpecker init(Application application) {
+    public static CrashWoodpecker flyTo(Application application) {
         return new CrashWoodpecker(application, false);
     }
+
+
+    /**
+     * Install CrashWoodpecker.
+     *
+     * @param application to capture exceptions for.
+     * @param forceHandleByOrigin whether to force original
+     * UncaughtExceptionHandler handle again,
+     * by default false.
+     * @return CrashWoodpecker instance.
+     * @deprecated use {@link CrashWoodpecker#flyTo(Application, boolean)} instead.
+     */
+    @Deprecated
+    public static CrashWoodpecker init(Application application, boolean forceHandleByOrigin) {
+        return flyTo(application, forceHandleByOrigin);
+    }
+
+
+    /**
+     * Install CrashWoodpecker.
+     *
+     * @param application to capture exceptions for.
+     * @return CrashWoodpecker instance.
+     * @deprecated use {@link CrashWoodpecker#flyTo(Application)} instead.
+     */
+    @Deprecated
+    public static CrashWoodpecker init(Application application) {
+        return flyTo(application, false);
+    }
+
 
     private CrashWoodpecker(Context context, boolean forceHandleByOrigin) {
         mContext = context;
         mForceHandleByOrigin = forceHandleByOrigin;
-
 
         try {
             PackageInfo info = context.getPackageManager()
@@ -104,7 +135,8 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             throw new RuntimeException(e);
         }
 
-        UncaughtExceptionHandler originHandler = Thread.currentThread().getUncaughtExceptionHandler();
+        UncaughtExceptionHandler originHandler = Thread.currentThread()
+            .getUncaughtExceptionHandler();
         // check to prevent set again
         if (this != originHandler) {
             mOriginHandler = originHandler;
@@ -112,6 +144,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             Thread.setDefaultUncaughtExceptionHandler(this);
         }
     }
+
 
     private boolean handleException(Throwable throwable) {
         boolean success = saveToFile(throwable);
@@ -142,7 +175,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         // pass it to interceptor's before method
         UncaughtExceptionInterceptor interceptor = mInterceptor;
         if (interceptor != null &&
-                interceptor.onInterceptExceptionBefore(thread, throwable)) {
+            interceptor.onInterceptExceptionBefore(thread, throwable)) {
             return;
         }
 
@@ -150,7 +183,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
         // pass it to interceptor's after method
         if (interceptor != null &&
-                interceptor.onInterceptExceptionAfter(thread, throwable)) {
+            interceptor.onInterceptExceptionAfter(thread, throwable)) {
             return;
         }
 
@@ -249,8 +282,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         File file = new File(crashPath);
         if (file.exists()) {
             file.delete();
-        }
-        else {
+        } else {
             try {
                 new File(crashDir).mkdirs();
                 file.createNewFile();

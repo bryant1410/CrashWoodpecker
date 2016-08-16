@@ -35,6 +35,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        CrashWoodpecker.init(this)
+        CrashWoodpecker.flyTo(this)
     }
 }
