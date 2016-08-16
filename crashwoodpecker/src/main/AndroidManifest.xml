@@ -34,12 +34,7 @@
             android:name=".ui.CatchActivity"
             android:label="@string/crash_app_name"
             android:theme="@style/Theme.Pecker"
-            android:taskAffinity="me.drakeet.library">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+            android:taskAffinity="me.drakeet.library"/>
     </application>
 
 </manifest>
