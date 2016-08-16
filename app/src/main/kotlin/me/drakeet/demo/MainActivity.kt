@@ -40,11 +40,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById(R.id.button_crash_1).setOnClickListener {
+        findViewById(R.id.button_crash_1)!!.setOnClickListener {
             view -> throw IOException("hehe =.=")
         }
 
-        findViewById(R.id.button_crash_2).setOnClickListener {
+        findViewById(R.id.button_crash_2)!!.setOnClickListener {
             view -> Thread({throw Exception("from a thread ~.~")}).start()
         }
     }
