@@ -2,7 +2,7 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker)
 
-An uncaught exception handler library like Square's [LeakCanary](https://github.com/square/leakcanary). Support showing logs both on Logcat & Woodpecker.
+A nice uncaught exception handler library like Square's [LeakCanary](https://github.com/square/leakcanary). Support showing logs both on Logcat & Woodpecker.
 
 ![screenshot.png](art/s2.png)
 
