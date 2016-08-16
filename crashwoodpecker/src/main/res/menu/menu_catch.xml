@@ -27,4 +27,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".CatchActivity">
+
+    <item
+        android:id="@+id/share_action"
+        android:title="@string/share"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:showAsAction="always"/>
 </menu>

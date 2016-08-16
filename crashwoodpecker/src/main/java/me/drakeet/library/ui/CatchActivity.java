@@ -84,6 +84,7 @@ public class CatchActivity extends Activity {
 
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_catch, menu);
         menu.add(Html.fromHtml("<font color='#ffffff'>drakeet</font>"))
             .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override public boolean onMenuItemClick(MenuItem item) {
@@ -93,5 +94,21 @@ public class CatchActivity extends Activity {
                 }
             });
         return true;
+    }
+
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.share_action) {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mLog4Cat);
+            sendIntent.setType("text/plain");
+            String title = getResources().getString(R.string.share);
+            Intent chooser = Intent.createChooser(sendIntent, title);
+            if (sendIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(chooser);
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
