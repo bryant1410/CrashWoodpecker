@@ -35,6 +35,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        CrashWoodpecker.flyTo(this)
+        CrashWoodpecker.flyTo(this).withKeys("widget", "me.drakeet");
     }
 }

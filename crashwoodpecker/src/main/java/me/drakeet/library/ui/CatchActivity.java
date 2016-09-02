@@ -36,6 +36,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import java.util.ArrayList;
 import me.drakeet.library.R;
 
 /**
@@ -46,39 +47,41 @@ public class CatchActivity extends Activity {
 
     public final static String EXTRA_CRASH_LOGS = "extra_crash_logs";
     public final static String EXTRA_CRASH_4_LOGCAT = "extra_crash_4_logcat";
-    public final static String EXTRA_PACKAGE = "extra_package";
-    private RecyclerView mRecyclerView;
-    CrashListAdapter mCrashListAdapter;
-    private String[] mCrashArray = { "Cause by 1", "At 2" };
-    private String mPackageName, mLog4Cat;
+    public final static String EXTRA_HIGHLIGHT_KEYS = "extra_package";
+    private RecyclerView recyclerView;
+    CrashListAdapter crashListAdapter;
+    private String[] crashArray = { "Cause by 1", "At 2" };
+    private String packageName, log4Cat;
+    private ArrayList<String> keys;
 
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catch);
         parseIntent();
-        if (mPackageName != null) setTitle("Crashes in " + mPackageName);
+        if (packageName != null) setTitle("Crashes in " + packageName);
         setUpRecyclerView();
     }
 
 
     private void parseIntent() {
-        mCrashArray = getIntent().getStringArrayExtra(EXTRA_CRASH_LOGS);
+        crashArray = getIntent().getStringArrayExtra(EXTRA_CRASH_LOGS);
         // TODO: 16/8/13 reload from files
-        mLog4Cat = getIntent().getStringExtra(EXTRA_CRASH_4_LOGCAT);
-        mPackageName = getIntent().getStringExtra(EXTRA_PACKAGE);
+        log4Cat = getIntent().getStringExtra(EXTRA_CRASH_4_LOGCAT);
+        keys = getIntent().getStringArrayListExtra(EXTRA_HIGHLIGHT_KEYS);
+        packageName = keys.get(0);
     }
 
 
     private void setUpRecyclerView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.crashes);
+        recyclerView = (RecyclerView) findViewById(R.id.crashes);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mCrashListAdapter = new CrashListAdapter(mCrashArray, mPackageName);
-        mRecyclerView.setAdapter(mCrashListAdapter);
-        if (!TextUtils.isEmpty(mLog4Cat)) {
-            Log.e("CrashWoodpecker", mLog4Cat);
+        recyclerView.setLayoutManager(layoutManager);
+        crashListAdapter = new CrashListAdapter(crashArray, keys.toArray(new String[keys.size()]));
+        recyclerView.setAdapter(crashListAdapter);
+        if (!TextUtils.isEmpty(log4Cat)) {
+            Log.e("CrashWoodpecker", log4Cat);
         }
     }
 
@@ -100,7 +103,7 @@ public class CatchActivity extends Activity {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.share_action) {
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, mLog4Cat);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, log4Cat);
             sendIntent.setType("text/plain");
             String title = getResources().getString(R.string.share);
             Intent chooser = Intent.createChooser(sendIntent, title);

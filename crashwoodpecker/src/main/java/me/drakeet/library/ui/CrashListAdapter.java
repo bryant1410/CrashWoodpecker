@@ -41,94 +41,111 @@ import me.drakeet.library.StringStyleUtils;
  * Created by drakeet(http://drakeet.me)
  * Date: 9/2/15 12:42
  */
-public class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder> {
+class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder> {
 
     public static final String TAG = "CrashListAdapter";
 
-    private String[] mData;
-    private String mPackageName;
+    private String[] traces;
+    private String[] keys;
+    private int selectedPosition = -1;
 
-    public CrashListAdapter(String[] strings, String pack) {
-        mData = strings;
-        mPackageName = pack;
+
+    CrashListAdapter(String[] traces, String[] keys) {
+        this.traces = traces;
+        this.keys = keys;
     }
+
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_trace, parent, false);
+            .inflate(R.layout.item_trace, parent, false);
         return new ViewHolder(v);
     }
 
-    @Override public void onBindViewHolder(final ViewHolder holder, final int position) {
-        String crash = mData[position];
-        holder.log = crash;
-        if (crash != null) {
-            setSpaceState(holder, /*show = */ crash.startsWith("at "));
 
-            if (crash.startsWith("Caused by")) {
+    @Override public void onBindViewHolder(final ViewHolder holder, final int position) {
+        String trace = traces[position];
+        holder.log = trace;
+        if (trace != null) {
+            setSpaceState(holder, /*show = */ trace.startsWith("at "));
+
+            if (trace.startsWith("Caused by")) {
                 holder.title.setTypeface(null, Typeface.BOLD);
                 holder.title.setTextColor(0xdeffffff);
-            }
-            else {
+            } else {
                 holder.title.setTypeface(null, Typeface.NORMAL);
                 holder.title.setTextColor(0xffef4545);
             }
 
-            if (mPackageName != null && crash.contains(mPackageName)) {
-                holder.itemView.setSelected(true);
-                int indexOfC = crash.indexOf("(");
-                if (indexOfC >= 0) {
-                    String atPackage = crash.substring(0, indexOfC);
-                    SpannableStringBuilder builder = new SpannableStringBuilder(atPackage).append(
+            boolean shouldHighlight = false;
+            for (String key : keys) {
+                if (trace.contains(key)) {
+                    if (selectedPosition == -1) {
+                        holder.itemView.setSelected(true);
+                        selectedPosition = position;
+                    }
+                    int indexOfC = trace.indexOf("(");
+                    if (indexOfC >= 0) {
+                        String atPackage = trace.substring(0, indexOfC);
+                        SpannableStringBuilder builder = new SpannableStringBuilder(
+                            atPackage).append(
                             StringStyleUtils.format(holder.title.getContext(),
-                                    " " + crash.substring(indexOfC), R.style.LineTextAppearance));
-                    CharSequence title = builder.subSequence(0, builder.length());
-                    holder.title.setText(title);
-                } 
-                else {
-                    holder.title.setText(crash);
+                                " " + trace.substring(indexOfC), R.style.LineTextAppearance));
+                        CharSequence title = builder.subSequence(0, builder.length());
+                        holder.title.setText(title);
+                    } else {
+                        holder.title.setText(trace);
+                    }
+                    shouldHighlight = true;
+                    break;
                 }
             }
-            else {
+
+            if (!shouldHighlight) {
                 holder.itemView.setSelected(false);
-                holder.title.setText(crash);
+                holder.title.setText(trace);
             }
         }
     }
+
 
     @Override public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
     }
 
+
     @Override public int getItemCount() {
-        return mData == null ? 0 : mData.length;
+        return traces == null ? 0 : traces.length;
     }
 
-    public void setSpaceState(ViewHolder holder, boolean show) {
+
+    private void setSpaceState(ViewHolder holder, boolean show) {
         if (!show) {
             holder.space.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             holder.space.setVisibility(View.VISIBLE);
         }
     }
+
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
         Space space;
         String log;
 
-        public ViewHolder(View itemView) {
+
+        ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.trace);
             space = (Space) itemView.findViewById(R.id.space);
             itemView.setOnClickListener(this);
         }
 
+
         @Override public void onClick(View v) {
             if (log.endsWith("more")) {
                 Toast.makeText(v.getContext(), "It is not supported temporarily.",
-                        Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             }
         }
     }

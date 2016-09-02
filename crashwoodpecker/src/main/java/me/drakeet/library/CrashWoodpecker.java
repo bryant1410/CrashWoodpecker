@@ -41,6 +41,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -54,19 +56,21 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
     private final static String TAG = "CrashWoodpecker";
 
-    // Default log out time, 7days.
+    /* Default log out time, 7days. */
     private final static long LOG_OUT_TIME = TimeUnit.DAYS.toMillis(7);
 
-    // get DateFormatter for current locale
-    private final static DateFormat mFormatter = DateFormat.getDateInstance();
+    /* get DateFormatter for current locale */
+    private final static DateFormat FORMATTER = DateFormat.getDateInstance();
 
-    private volatile UncaughtExceptionHandler mOriginHandler;
-    private volatile UncaughtExceptionInterceptor mInterceptor;
-    private volatile boolean mCrashing = false;
+    private volatile UncaughtExceptionHandler originHandler;
+    private volatile UncaughtExceptionInterceptor interceptor;
+    private volatile boolean crashing = false;
 
-    private boolean mForceHandleByOrigin = false;
-    private final Context mContext;
-    private final String mVersion;
+    private boolean forceHandleByOrigin = false;
+    private final Context context;
+    private final String version;
+    /* for highlight */
+    private ArrayList<String> keys;
 
 
     /**
@@ -124,13 +128,15 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
 
     private CrashWoodpecker(Context context, boolean forceHandleByOrigin) {
-        mContext = context;
-        mForceHandleByOrigin = forceHandleByOrigin;
+        this.context = context;
+        this.forceHandleByOrigin = forceHandleByOrigin;
+        this.keys = new ArrayList<>();
+        this.keys.add(this.context.getPackageName());
 
         try {
             PackageInfo info = context.getPackageManager()
                 .getPackageInfo(context.getPackageName(), 0);
-            mVersion = info.versionName + "(" + info.versionCode + ")";
+            version = info.versionName + "(" + info.versionCode + ")";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -139,7 +145,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             .getUncaughtExceptionHandler();
         // check to prevent set again
         if (this != originHandler) {
-            mOriginHandler = originHandler;
+            this.originHandler = originHandler;
             Thread.currentThread().setUncaughtExceptionHandler(this);
             Thread.setDefaultUncaughtExceptionHandler(this);
         }
@@ -167,13 +173,13 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
         // Don't re-enter,  avoid infinite loops if crash-handler crashes.
-        if (mCrashing) {
+        if (crashing) {
             return;
         }
-        mCrashing = true;
+        crashing = true;
 
         // pass it to interceptor's before method
-        UncaughtExceptionInterceptor interceptor = mInterceptor;
+        UncaughtExceptionInterceptor interceptor = this.interceptor;
         if (interceptor != null &&
             interceptor.onInterceptExceptionBefore(thread, throwable)) {
             return;
@@ -187,9 +193,21 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             return;
         }
 
-        if ((mForceHandleByOrigin || !isHandle) && mOriginHandler != null) {
-            mOriginHandler.uncaughtException(thread, throwable);
+        if ((forceHandleByOrigin || !isHandle) && originHandler != null) {
+            originHandler.uncaughtException(thread, throwable);
         }
+    }
+
+
+    /**
+     * For setting more highlight keys except package name
+     *
+     * @param keys highlight keys except package name
+     * @return itself
+     */
+    public CrashWoodpecker withKeys(final String... keys) {
+        this.keys.addAll(Arrays.asList(keys));
+        return this;
     }
 
 
@@ -197,9 +215,11 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
      * Set uncaught exception interceptor.
      *
      * @param interceptor uncaught exception interceptor.
+     * @return itself
      */
-    public void setInterceptor(UncaughtExceptionInterceptor interceptor) {
-        mInterceptor = interceptor;
+    public CrashWoodpecker setInterceptor(UncaughtExceptionInterceptor interceptor) {
+        this.interceptor = interceptor;
+        return this;
     }
 
 
@@ -246,17 +266,17 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     private void startCatchActivity(Throwable throwable) {
         String traces = getStackTrace(throwable);
         Intent intent = new Intent();
-        intent.setClass(mContext, CatchActivity.class);
+        intent.setClass(context, CatchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         String[] strings = traces.split("\n");
         String[] logs = new String[strings.length];
         for (int i = 0; i < strings.length; i++) {
             logs[i] = strings[i].trim();
         }
-        intent.putExtra(CatchActivity.EXTRA_PACKAGE, mContext.getPackageName());
+        intent.putStringArrayListExtra(CatchActivity.EXTRA_HIGHLIGHT_KEYS, keys);
         intent.putExtra(CatchActivity.EXTRA_CRASH_LOGS, logs);
         intent.putExtra(CatchActivity.EXTRA_CRASH_4_LOGCAT, Log.getStackTraceString(throwable));
-        mContext.startActivity(intent);
+        context.startActivity(intent);
     }
 
 
@@ -270,7 +290,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
 
     private boolean saveToFile(Throwable throwable) {
-        String time = mFormatter.format(new Date());
+        String time = FORMATTER.format(new Date());
         String fileName = "Crash-" + time + ".log";
         String crashDir = getCrashDir();
         String crashPath = crashDir + fileName;
@@ -299,7 +319,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         }
         writer.write("Device: " + manufacturer + ", " + deviceModel + "\n");
         writer.write("Android Version: " + androidVersion + "\n");
-        if (mVersion != null) writer.write("App Version: " + mVersion + "\n");
+        if (version != null) writer.write("App Version: " + version + "\n");
         writer.write("---------------------\n\n");
         throwable.printStackTrace(writer);
         writer.close();

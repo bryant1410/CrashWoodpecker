@@ -71,7 +71,13 @@ public class CrashWoodpecker implements Thread.UncaughtExceptionHandler {
     }
 
 
-    public void setInterceptor(UncaughtExceptionInterceptor interceptor) {
+    public CrashWoodpecker withKeys(final String... keys) {
+        return this;
+    }
+
+
+    public CrashWoodpecker setInterceptor(UncaughtExceptionInterceptor interceptor) {
+        return this;
     }
 
 

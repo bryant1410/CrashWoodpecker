@@ -14,8 +14,8 @@ In your `build.gradle`:
 
 ```gradle
 dependencies {
-  debugCompile 'me.drakeet.library:crashwoodpecker:1.2'
-  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:1.2'
+  debugCompile 'me.drakeet.library:crashwoodpecker:1.3'
+  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:1.3'
 }
 ```
 
@@ -27,7 +27,8 @@ public class ExampleApplication extends Application {
   @Override public void onCreate() {
     super.onCreate();
     CrashWoodpecker.flyTo(this);
-    // CrashWoodpecker.flyTo(this, true /* forceHandleByOrigin */);
+    // or add more highlight keys except the default package name:
+    // CrashWoodpecker.flyTo(this).withKeys("widget", "me.drakeet");
   }
 }
 ```
