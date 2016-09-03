@@ -61,7 +61,7 @@ v1.3.1
 
 - Added padding top & bottom to list and improved the selection program
 
-withKeys:
+With multiple keys: packageName(default), "widget", "me.drakeet"
 
 <img src="art/s3.png" height=500 width=280/>
 
