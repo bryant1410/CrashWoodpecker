@@ -47,11 +47,12 @@ public class CatchActivity extends Activity {
 
     public final static String EXTRA_CRASH_LOGS = "extra_crash_logs";
     public final static String EXTRA_CRASH_4_LOGCAT = "extra_crash_4_logcat";
-    public final static String EXTRA_HIGHLIGHT_KEYS = "extra_package";
+    public final static String EXTRA_HIGHLIGHT_KEYS = "extra_highlight_keys";
+    public final static String EXTRA_APPLICATION_NAME = "extra_application_name";
     private RecyclerView recyclerView;
     CrashListAdapter crashListAdapter;
     private String[] crashArray = { "Cause by 1", "At 2" };
-    private String packageName, log4Cat;
+    private String log4Cat, applicationName;
     private ArrayList<String> keys;
 
 
@@ -59,7 +60,7 @@ public class CatchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catch);
         parseIntent();
-        if (packageName != null) setTitle("Crashes in " + packageName);
+        if (applicationName != null) setTitle("Crashes in " + applicationName);
         setUpRecyclerView();
     }
 
@@ -69,7 +70,7 @@ public class CatchActivity extends Activity {
         // TODO: 16/8/13 reload from files
         log4Cat = getIntent().getStringExtra(EXTRA_CRASH_4_LOGCAT);
         keys = getIntent().getStringArrayListExtra(EXTRA_HIGHLIGHT_KEYS);
-        packageName = keys.get(0);
+        applicationName = getIntent().getStringExtra(EXTRA_APPLICATION_NAME);
     }
 
 

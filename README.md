@@ -14,8 +14,8 @@ In your `build.gradle`:
 
 ```gradle
 dependencies {
-  debugCompile 'me.drakeet.library:crashwoodpecker:1.3.1'
-  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:1.3.1'
+  debugCompile 'me.drakeet.library:crashwoodpecker:1.3.2'
+  releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:1.3.2'
 }
 ```
 
@@ -57,13 +57,18 @@ CrashWoodpecker.flyTo(this).withKeys("widget", "me.drakeet");
 - Changed `setInterceptor` to return `CrashWoodpecker` itself
 - Updated android support libs to v24
 
+With multiple keys: packageName(default), "widget", "me.drakeet"
+
+<img src="art/s3.png" height=500 width=280/>
+
 v1.3.1
 
 - Added padding top & bottom to list and improved the selection program
 
-With multiple keys: packageName(default), "widget", "me.drakeet"
+v1.3.2
 
-<img src="art/s3.png" height=500 width=280/>
+- Used application name to show in the crash page title
+
 
 ## TODO
 

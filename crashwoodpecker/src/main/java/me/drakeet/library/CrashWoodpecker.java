@@ -28,7 +28,9 @@ package me.drakeet.library;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
@@ -45,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
 import me.drakeet.library.ui.CatchActivity;
 
 /**
@@ -274,6 +275,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             logs[i] = strings[i].trim();
         }
         intent.putStringArrayListExtra(CatchActivity.EXTRA_HIGHLIGHT_KEYS, keys);
+        intent.putExtra(CatchActivity.EXTRA_APPLICATION_NAME, getApplicationName(context));
         intent.putExtra(CatchActivity.EXTRA_CRASH_LOGS, logs);
         intent.putExtra(CatchActivity.EXTRA_CRASH_4_LOGCAT, Log.getStackTraceString(throwable));
         context.startActivity(intent);
@@ -325,6 +327,22 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         writer.close();
 
         return true;
+    }
+
+
+    public String getApplicationName(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        ApplicationInfo applicationInfo = null;
+        String name = null;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(
+                context.getApplicationInfo().packageName, 0);
+            name = (String) packageManager.getApplicationLabel(applicationInfo);
+        } catch (final PackageManager.NameNotFoundException e) {
+            String[] packages = context.getPackageName().split(".");
+            name = packages[packages.length - 1];
+        }
+        return name;
     }
 
 
