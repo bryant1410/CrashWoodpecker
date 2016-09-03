@@ -51,6 +51,7 @@ And in your `AndroidManifest.xml` file:
 ## TODO
 
 * Save logs and to reload.
+* Java doc and source archives.
 
 ## Thanks
 
