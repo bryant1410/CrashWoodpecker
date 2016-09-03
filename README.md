@@ -45,8 +45,25 @@ And in your `AndroidManifest.xml` file:
 
 **That is all!** CrashWoodpecker will automatically show an Activity when your app crash with uncaught exceptions including new thread exceptions in your debug build.
 
-[![GitHub release](https://img.shields.io/badge/sample%20apk-v1.1-brightgreen.svg?style=flat)](https://github.com/drakeet/CrashWoodpecker/releases/download/v1.1/LittleWood.apk) 
+## Change logs
 
+v1.3.0
+
+- Added `withKeys` for more highlight keys
+```java
+// add more highlight keys except the default package name:
+CrashWoodpecker.flyTo(this).withKeys("widget", "me.drakeet");
+```
+- Changed `setInterceptor` to return `CrashWoodpecker` itself
+- Updated android support libs to v24
+
+v1.3.1
+
+- Added padding top & bottom to list and improved the selection program
+
+withKeys:
+
+<img src="art/s3.png" height=500 width=280/>
 
 ## TODO
 
@@ -64,6 +81,8 @@ jug6ernaut: https://github.com/jug6ernaut
 ## About me
 
 https://github.com/drakeet
+
+https://drakeet.me
 
 
 License
