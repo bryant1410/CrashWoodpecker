@@ -66,8 +66,9 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
     @Override public void onBindViewHolder(final ViewHolder holder, final int position) {
         String trace = traces[position];
         holder.log = trace;
+        boolean startsWithAt = trace.startsWith("at ");
         if (trace != null) {
-            setSpaceState(holder, /*show = */ trace.startsWith("at "));
+            setSpaceState(holder, /*show = */ startsWithAt);
 
             if (trace.startsWith("Caused by")) {
                 holder.title.setTypeface(null, Typeface.BOLD);
@@ -79,9 +80,8 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
 
             boolean shouldHighlight = false;
             for (String key : keys) {
-                if (trace.contains(key)) {
+                if (startsWithAt && trace.contains(key)) {
                     if (selectedPosition == -1) {
-                        holder.itemView.setSelected(true);
                         selectedPosition = position;
                     }
                     int indexOfC = trace.indexOf("(");
@@ -104,6 +104,12 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
             if (!shouldHighlight) {
                 holder.itemView.setSelected(false);
                 holder.title.setText(trace);
+            }
+
+            if (selectedPosition == position) {
+                holder.itemView.setSelected(true);
+            } else {
+                holder.itemView.setSelected(false);
             }
         }
     }
