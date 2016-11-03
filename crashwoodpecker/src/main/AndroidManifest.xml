@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ The MIT License (MIT)
   ~
   ~ Copyright (c) 2015 drakeet (drakeet.me@gmail.com)
@@ -21,8 +21,7 @@
   ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.drakeet.library">
 
@@ -30,11 +29,18 @@
 
     <application>
         <activity
-            android:icon="@mipmap/ic_woodpecker"
             android:name=".ui.CatchActivity"
             android:label="@string/crash_app_name"
-            android:theme="@style/Theme.Pecker"
-            android:taskAffinity="me.drakeet.library"/>
+            android:process=":woodpecker"
+            android:taskAffinity="me.drakeet.library"
+            android:theme="@style/Theme.Pecker"/>
+
+        <activity
+            android:name=".ui.DialogActivity"
+            android:label="@string/crash_app_name"
+            android:process=":woodpecker"
+            android:taskAffinity="me.drakeet.library"
+            android:theme="@style/Base.Theme.Pecker"/>
     </application>
 
 </manifest>

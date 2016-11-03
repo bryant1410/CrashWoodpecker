@@ -46,8 +46,8 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import me.drakeet.library.ui.CatchActivity;
+import me.drakeet.library.ui.DialogActivity;
 
 /**
  * Created by drakeet(http://drakeet.me)
@@ -57,8 +57,8 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
     private final static String TAG = "CrashWoodpecker";
 
-    /* Default log out time, 7days. */
-    private final static long LOG_OUT_TIME = TimeUnit.DAYS.toMillis(7);
+    /* Default log out time, 7 days. */
+    private final static long LOG_OUT_TIME = 7 * 24 * 60 * 60 * 1000;
 
     /* get DateFormatter for current locale */
     private final static DateFormat FORMATTER = DateFormat.getDateInstance();
@@ -72,6 +72,10 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     private final String version;
     /* for highlight */
     private ArrayList<String> keys;
+    private PatchMode mode;
+    private String patchDialogTitle;
+    private String patchDialogMessage;
+    private String patchDialogUrlToOpen;
 
 
     /**
@@ -156,12 +160,24 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     private boolean handleException(Throwable throwable) {
         boolean success = saveToFile(throwable);
         try {
-            startCatchActivity(throwable);
-            byeByeLittleWood();
+            if (mode == PatchMode.SHOW_LOG_PAGE) {
+                startCatchActivity(throwable);
+                byeByeLittleWood();
+            } else if (mode == PatchMode.SHOW_DIALOG_TO_OPEN_URL) {
+                showPatchDialog();
+            }
         } catch (Exception e) {
             success = false;
         }
         return success;
+    }
+
+
+    private void showPatchDialog() {
+        Intent intent = DialogActivity.newIntent(context,
+            patchDialogTitle, patchDialogMessage, patchDialogUrlToOpen);
+        context.startActivity(intent);
+        byeByeLittleWood();
     }
 
 
@@ -243,17 +259,17 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             final long currTime = System.currentTimeMillis();
             File[] files = logDir.listFiles(new FilenameFilter() {
                 @Override public boolean accept(File dir, String filename) {
-                    File f = new File(dir, filename);
-                    return currTime - f.lastModified() > timeout;
+                    File file = new File(dir, filename);
+                    return currTime - file.lastModified() > timeout;
                 }
             });
             if (files != null) {
-                for (File f : files) {
-                    FileUtils.delete(f);
+                for (File file : files) {
+                    FileUtils.delete(file);
                 }
             }
         } catch (Exception e) {
-            Log.v(TAG, "exception occurs when deleting outmoded logs", e);
+            Log.v(TAG, "Exception occurs when deleting outmoded logs", e);
         }
     }
 
@@ -327,6 +343,30 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         writer.close();
 
         return true;
+    }
+
+
+    public CrashWoodpecker setPatchMode(PatchMode mode) {
+        this.mode = mode;
+        return this;
+    }
+
+
+    public CrashWoodpecker setPatchDialogTitle(String title) {
+        this.patchDialogTitle = title;
+        return this;
+    }
+
+
+    public CrashWoodpecker setPatchDialogMessage(String message) {
+        this.patchDialogMessage = message;
+        return this;
+    }
+
+
+    public CrashWoodpecker setPatchDialogUrlToOpen(String url) {
+        this.patchDialogUrlToOpen = url;
+        return this;
     }
 
 
