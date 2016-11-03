@@ -34,6 +34,10 @@
         parent="android:Theme.Black">
     </style>
 
+    <style name="Theme.Dialog"
+        parent="android:Theme.NoTitleBar">
+    </style>
+
     <style name="LineTextAppearance">
         <item name="android:textColor">@color/my_fault</item>
     </style>

@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        throw RuntimeException()
+
         findViewById(R.id.button_crash_1)!!.setOnClickListener {
             view -> throw IOException("hehe =.=")
         }

@@ -25,8 +25,11 @@
 
 package me.drakeet.demo
 
+import android.app.ActivityManager
 import android.app.Application
+import android.content.Context
 import me.drakeet.library.CrashWoodpecker
+import me.drakeet.library.PatchMode
 
 /**
  * Created by drakeet on 8/31/15.
@@ -35,6 +38,30 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        CrashWoodpecker.flyTo(this).withKeys("widget", "me.drakeet");
+        if (isMainProcess()) {
+            CrashWoodpecker.flyTo(this)
+                .withKeys("widget", "me.drakeet")
+                .setPatchMode(PatchMode.SHOW_DIALOG_TO_OPEN_URL)
+                .setPatchDialogTitle("Error")
+                .setPatchDialogMessage("Sorry! There is some wrong with the App, " +
+                    "please click OK to open a page to download a new APK.")
+                .setPatchDialogUrlToOpen("https://drakeet.me")
+        }
+    }
+
+    private fun isMainProcess(): Boolean {
+        return packageName == getProcessName()
+    }
+
+    private fun getProcessName(): String? {
+        val pid = android.os.Process.myPid()
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val processes = manager.runningAppProcesses
+        for (process in processes) {
+            if (process.pid === pid) {
+                return process.processName
+            }
+        }
+        return null
     }
 }
