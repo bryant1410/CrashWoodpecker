@@ -30,7 +30,7 @@
         parent="android:Theme.Holo.Light.DarkActionBar">
     </style>
 
-    <style name="Theme.Dialog"
+    <style name="Theme.NoTitleBar"
         parent="android:Theme.Holo.NoActionBar">
     </style>
 

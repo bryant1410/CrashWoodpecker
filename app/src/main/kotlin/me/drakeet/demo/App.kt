@@ -44,7 +44,7 @@ class App : Application() {
                 .setPatchMode(PatchMode.SHOW_DIALOG_TO_OPEN_URL)
                 .setPatchDialogTitle("Error")
                 .setPatchDialogMessage("Sorry! There is some wrong with the App, " +
-                    "please click OK to open a page to download a new APK.")
+                    "please click OK to open a page to download a new stable APK.")
                 .setPatchDialogUrlToOpen("https://drakeet.me")
         }
     }
