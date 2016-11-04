@@ -23,29 +23,10 @@
   ~ SOFTWARE.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:minHeight="36dp"
-    android:background="@drawable/bg_item_crash">
-
-    <android.support.v4.widget.Space
-        android:id="@+id/space"
-        android:layout_width="24dp"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/trace"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@color/item_crash"
-        android:textColor="@color/trace_text"
-        tools:text="123, 123"/>
-
-</LinearLayout>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true"
+        android:drawable="@color/cw_item_crash_selected"/>
+    <item android:state_pressed="true"
+        android:drawable="@color/cw_item_crash_selected"/>
+    <item android:drawable="@color/cw_item_crash"/>
+</selector>

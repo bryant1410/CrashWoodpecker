@@ -58,7 +58,7 @@ public class CatchActivity extends Activity {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_catch);
+        setContentView(R.layout.cw_activity_catch);
         parseIntent();
         if (applicationName != null) setTitle("Crashes in " + applicationName);
         setUpRecyclerView();
@@ -106,7 +106,7 @@ public class CatchActivity extends Activity {
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, log4Cat);
             sendIntent.setType("text/plain");
-            String title = getResources().getString(R.string.share);
+            String title = getResources().getString(R.string.cw_share);
             Intent chooser = Intent.createChooser(sendIntent, title);
             if (sendIntent.resolveActivity(getPackageManager()) != null) {
                 startActivity(chooser);

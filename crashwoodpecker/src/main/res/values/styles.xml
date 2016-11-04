@@ -27,7 +27,7 @@
 
     <style name="Theme.Pecker"
         parent="Base.Theme.Pecker">
-        <item name="android:background">@color/windowBackground</item>
+        <item name="android:background">@color/cw_windowBackground</item>
     </style>
 
     <style name="Base.Theme.Pecker"
@@ -44,7 +44,7 @@
     </style>
 
     <style name="LineTextAppearance">
-        <item name="android:textColor">@color/my_fault</item>
+        <item name="android:textColor">@color/cw_my_fault</item>
     </style>
 
 </resources>
