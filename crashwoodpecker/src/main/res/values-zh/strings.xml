@@ -5,4 +5,5 @@
     <string name="cw_action_restart">重启</string>
     <string name="cw_action_settings">设置</string>
     <string name="cw_share">分享日志到...</string>
+    <string name="cw_error_title">出错</string>
 </resources>

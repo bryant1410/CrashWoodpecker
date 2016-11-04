@@ -49,7 +49,6 @@ class App : Application() {
             CrashWoodpecker.flyTo(this)
                 .withKeys("widget", "me.drakeet")
                 .setPatchMode(patchMode)
-                .setPatchDialogTitle("Error")
                 .setPatchDialogUrlToOpen("https://drakeet.me")
         }
     }
