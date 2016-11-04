@@ -29,14 +29,13 @@
     android:layout_height="match_parent"
     android:padding="24dp"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="right|center_vertical"
     tools:context=".MainActivity">
 
     <Switch
-        android:id="@+id/crash_next_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Crash immediately next start time "/>
+        style="@style/Switch"
+        android:id="@+id/patch_mode"
+        android:text="Patch mode: LOG MODE"/>
 
     <Button
         style="@style/ActionButton"

@@ -31,7 +31,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Switch
-import android.widget.Toast
+import me.drakeet.library.CrashWoodpecker
+import me.drakeet.library.PatchMode
 import java.io.IOException
 
 /**
@@ -39,15 +40,13 @@ import java.io.IOException
  */
 class MainActivity : AppCompatActivity() {
 
-    val KEY_IS_CHECKED = "isChecked";
+    val KEY_IS_DIALOG_MODE = "key_is_log_mode";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val preferences = getSharedPreferences("CrashWoodpecker-Sample", Context.MODE_PRIVATE)
-        if (preferences.getBoolean(KEY_IS_CHECKED, false)) {
-            throw RuntimeException()
-        }
+        val isDialogMode = preferences.getBoolean(KEY_IS_DIALOG_MODE, false)
 
         setContentView(R.layout.activity_main)
 
@@ -59,13 +58,22 @@ class MainActivity : AppCompatActivity() {
             Thread({ throw Exception("from a thread ~.~") }).start()
         }
 
-        val crashNextTimeSwitch = findViewById(R.id.crash_next_time) as Switch
-        crashNextTimeSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
-            preferences.edit().putBoolean(KEY_IS_CHECKED, isChecked).apply()
-            if (isChecked) {
-                Toast.makeText(compoundButton.context,
-                    "Please restart the app", Toast.LENGTH_LONG).show()
-            }
+        val patchModeSwitch = findViewById(R.id.patch_mode) as Switch
+        switchPatchMode(patchModeSwitch, isDialogMode);
+        patchModeSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
+            switchPatchMode(patchModeSwitch, isChecked)
+            preferences.edit().putBoolean(KEY_IS_DIALOG_MODE, isChecked).apply()
+        }
+    }
+
+    private fun switchPatchMode(patchModeSwitch: Switch, checked: Boolean) {
+        if (checked) {
+            CrashWoodpecker.instance().setPatchMode(PatchMode.SHOW_DIALOG_TO_OPEN_URL);
+            patchModeSwitch.text = "Patch Mode: dialog mode"
+
+        } else {
+            CrashWoodpecker.instance().setPatchMode(PatchMode.SHOW_LOG_PAGE);
+            patchModeSwitch.text = "Patch Mode: log mode"
         }
     }
 
