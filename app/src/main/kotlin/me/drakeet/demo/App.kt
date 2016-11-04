@@ -36,9 +36,11 @@ import me.drakeet.library.PatchMode
  */
 class App : Application() {
 
+    var debug = false
+
     override fun onCreate() {
         super.onCreate()
-        val patchMode = if (BuildConfig.DEBUG) {
+        val patchMode = if (debug) {
             PatchMode.SHOW_LOG_PAGE
         } else {
             PatchMode.SHOW_DIALOG_TO_OPEN_URL
