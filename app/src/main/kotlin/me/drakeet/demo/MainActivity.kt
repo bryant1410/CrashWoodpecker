@@ -25,10 +25,13 @@
 
 package me.drakeet.demo
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Switch
+import android.widget.Toast
 import java.io.IOException
 
 /**
@@ -36,18 +39,33 @@ import java.io.IOException
  */
 class MainActivity : AppCompatActivity() {
 
+    val KEY_IS_CHECKED = "isChecked";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        throw RuntimeException()
-
-        findViewById(R.id.button_crash_1)!!.setOnClickListener {
-            view -> throw IOException("hehe =.=")
+        val preferences = getSharedPreferences("CrashWoodpecker-Sample", Context.MODE_PRIVATE)
+        if (preferences.getBoolean(KEY_IS_CHECKED, false)) {
+            throw RuntimeException()
         }
 
-        findViewById(R.id.button_crash_2)!!.setOnClickListener {
-            view -> Thread({throw Exception("from a thread ~.~")}).start()
+        setContentView(R.layout.activity_main)
+
+        findViewById(R.id.button_crash_1)!!.setOnClickListener { view ->
+            throw IOException("=.=")
+        }
+
+        findViewById(R.id.button_crash_2)!!.setOnClickListener { view ->
+            Thread({ throw Exception("from a thread ~.~") }).start()
+        }
+
+        val crashNextTimeSwitch = findViewById(R.id.crash_next_time) as Switch
+        crashNextTimeSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
+            preferences.edit().putBoolean(KEY_IS_CHECKED, isChecked).apply()
+            if (isChecked) {
+                Toast.makeText(compoundButton.context,
+                    "Please restart the app", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -57,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_settings -> return true
             else -> return super.onOptionsItemSelected(item)
         }
