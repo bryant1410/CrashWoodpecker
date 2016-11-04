@@ -26,7 +26,6 @@
 package me.drakeet.library.ui;
 
 import android.graphics.Typeface;
-import android.support.v4.widget.Space;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -35,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import me.drakeet.library.R;
+import me.drakeet.library.Space;
 import me.drakeet.library.StringStyleUtils;
 
 import static me.drakeet.library.R.id.trace;
