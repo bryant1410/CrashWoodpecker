@@ -38,13 +38,17 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        val patchMode = if (BuildConfig.DEBUG) {
+            PatchMode.SHOW_LOG_PAGE
+        } else {
+            PatchMode.SHOW_DIALOG_TO_OPEN_URL
+        }
         if (isMainProcess()) {
             CrashWoodpecker.flyTo(this)
                 .withKeys("widget", "me.drakeet")
-                .setPatchMode(PatchMode.SHOW_DIALOG_TO_OPEN_URL)
+                .setPatchMode(patchMode)
                 .setPatchDialogTitle("Error")
-                .setPatchDialogMessage("Sorry! There is some wrong with the App, " +
-                    "please click OK to open a page to download a new stable APK.")
+                .setPatchDialogMessage(getString(R.string.error_message))
                 .setPatchDialogUrlToOpen("https://drakeet.me")
         }
     }

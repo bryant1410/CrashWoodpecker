@@ -24,6 +24,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply from: './gradle-mvn-push.gradle'
 
 android {
@@ -42,9 +43,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 dependencies {
     // Keep the same dependencies with debug
     compile 'com.android.support:recyclerview-v7:24.2.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+repositories {
+    mavenCentral()
 }
