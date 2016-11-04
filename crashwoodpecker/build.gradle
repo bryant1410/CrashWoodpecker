@@ -4,6 +4,7 @@ apply from: './gradle-mvn-push.gradle'
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
+    resourcePrefix "cw"
 
     defaultConfig {
         minSdkVersion 9

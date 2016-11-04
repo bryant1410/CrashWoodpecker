@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import me.drakeet.library.R;
 
 public class DialogActivity extends Activity {
 
@@ -39,6 +40,7 @@ public class DialogActivity extends Activity {
             .setTitle(title)
             .setMessage(message)
             .setCancelable(false)
+            .setIcon(R.drawable.cw_ic_error)
             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

@@ -26,10 +26,10 @@
 
 <resources>
 
-    <color name="windowBackground">#373636</color>
-    <color name="trace_text">#FF6B68</color>
-    <color name="my_fault">#E040FB</color>
-    <color name="item_crash_selected">#5a000000</color>
-    <color name="item_crash">#00000000</color>
+    <color name="cw_windowBackground">#373636</color>
+    <color name="cw_trace_text">#FF6B68</color>
+    <color name="cw_my_fault">#E040FB</color>
+    <color name="cw_item_crash_selected">#5a000000</color>
+    <color name="cw_item_crash">#00000000</color>
 
 </resources>

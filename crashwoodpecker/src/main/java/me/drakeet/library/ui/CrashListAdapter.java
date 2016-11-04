@@ -37,6 +37,8 @@ import android.widget.Toast;
 import me.drakeet.library.R;
 import me.drakeet.library.StringStyleUtils;
 
+import static me.drakeet.library.R.id.trace;
+
 /**
  * Created by drakeet(http://drakeet.me)
  * Date: 9/2/15 12:42
@@ -58,12 +60,13 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.item_trace, parent, false);
+            .inflate(R.layout.cw_item_trace, parent, false);
         return new ViewHolder(v);
     }
 
 
-    @Override public void onBindViewHolder(final ViewHolder holder, final int position) {
+    @Override public void onBindViewHolder(final ViewHolder holder, final int _position) {
+        int position = holder.getAdapterPosition();
         String trace = traces[position];
         holder.log = trace;
         boolean startsWithAt = trace.startsWith("at ");
@@ -142,7 +145,7 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
 
         ViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.trace);
+            title = (TextView) itemView.findViewById(trace);
             space = (Space) itemView.findViewById(R.id.space);
             itemView.setOnClickListener(this);
         }
