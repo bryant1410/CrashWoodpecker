@@ -63,6 +63,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
     /* get DateFormatter for current locale */
     private final static DateFormat FORMATTER = DateFormat.getDateInstance();
+    private static final PatchMode DEFAULT_MODE = PatchMode.SHOW_LOG_PAGE;
 
     private volatile UncaughtExceptionHandler originHandler;
     private volatile UncaughtExceptionInterceptor interceptor;
@@ -138,6 +139,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         this.forceHandleByOrigin = forceHandleByOrigin;
         this.keys = new ArrayList<>();
         this.keys.add(this.context.getPackageName());
+        this.mode = DEFAULT_MODE;
 
         try {
             PackageInfo info = context.getPackageManager()
