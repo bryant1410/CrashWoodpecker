@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cw_error_message">对不起！程序出现异常退出了。\n\n请点击 下载最新版 按钮获得最新稳定版，或者点击 重启 按钮进行重试。</string>
+    <string name="cw_action_download">下载最新版</string>
+    <string name="cw_action_restart">重启</string>
+    <string name="cw_action_settings">设置</string>
+    <string name="cw_share">分享日志到...</string>
+</resources>

@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import me.drakeet.library.R;
 
+import static me.drakeet.library.FileUtils.clearApplicationData;
+
 public class DialogActivity extends Activity {
 
     private static final String EXTRA_TITLE = "extra_title";
@@ -67,6 +69,7 @@ public class DialogActivity extends Activity {
             })
             .setPositiveButton(R.string.cw_action_restart, new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
+                    clearApplicationData(getApplicationContext());
                     dialog.dismiss();
                     finish();
                     restart();
