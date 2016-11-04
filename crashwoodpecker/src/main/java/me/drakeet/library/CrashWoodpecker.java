@@ -78,6 +78,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     private String patchDialogTitle;
     private String patchDialogMessage;
     private String patchDialogUrlToOpen;
+    private static CrashWoodpecker instance;
 
 
     /**
@@ -90,7 +91,10 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
      * @return CrashWoodpecker instance.
      */
     public static CrashWoodpecker flyTo(Application application, boolean forceHandleByOrigin) {
-        return new CrashWoodpecker(application, forceHandleByOrigin);
+        if (instance == null) {
+            instance = new CrashWoodpecker(application, forceHandleByOrigin);
+        }
+        return instance;
     }
 
 
@@ -101,7 +105,15 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
      * @return CrashWoodpecker instance.
      */
     public static CrashWoodpecker flyTo(Application application) {
-        return new CrashWoodpecker(application, false);
+        if (instance == null) {
+            instance = new CrashWoodpecker(application, false);
+        }
+        return instance;
+    }
+
+
+    public static CrashWoodpecker instance() {
+        return instance;
     }
 
 
