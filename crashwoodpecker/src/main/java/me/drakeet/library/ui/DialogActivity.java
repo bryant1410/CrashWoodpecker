@@ -49,6 +49,9 @@ public class DialogActivity extends Activity {
         if (ultimateMessage == null) {
             ultimateMessage = getString(R.string.cw_error_message);
         }
+        if (title == null) {
+            title = getString(R.string.cw_error_title);
+        }
         ultimateSolution();
     }
 
