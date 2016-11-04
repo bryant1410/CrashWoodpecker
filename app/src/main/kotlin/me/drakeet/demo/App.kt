@@ -48,7 +48,7 @@ class App : Application() {
                 .withKeys("widget", "me.drakeet")
                 .setPatchMode(patchMode)
                 .setPatchDialogTitle("Error")
-                .setPatchDialogMessage(getString(R.string.error_message))
+                .setPatchDialogMessage(R.string.error_message)
                 .setPatchDialogUrlToOpen("https://drakeet.me")
         }
     }

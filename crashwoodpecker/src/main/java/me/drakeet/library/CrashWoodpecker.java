@@ -33,6 +33,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.StringRes;
 import android.util.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -358,8 +359,20 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     }
 
 
+    public CrashWoodpecker setPatchDialogTitle(@StringRes int titleResId) {
+        this.patchDialogTitle = context.getString(titleResId);
+        return this;
+    }
+
+
     public CrashWoodpecker setPatchDialogMessage(String message) {
         this.patchDialogMessage = message;
+        return this;
+    }
+
+
+    public CrashWoodpecker setPatchDialogMessage(@StringRes int messageResId) {
+        this.patchDialogMessage = context.getString(messageResId);
         return this;
     }
 
