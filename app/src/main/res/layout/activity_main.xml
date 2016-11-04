@@ -27,22 +27,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:padding="24dp"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button_crash_1"
-        android:text="throw an IOException"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <Switch
+        android:id="@+id/crash_next_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crash immediately next start time "/>
 
     <Button
+        style="@style/ActionButton"
+        android:id="@+id/button_crash_1"
+        android:text="throw an IOException"/>
+
+    <Button
+        style="@style/ActionButton"
         android:id="@+id/button_crash_2"
-        android:text="throw a Thread Exception"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:text="throw a Thread Exception"/>
 
 </LinearLayout>
