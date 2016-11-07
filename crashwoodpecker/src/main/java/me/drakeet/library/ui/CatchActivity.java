@@ -87,6 +87,7 @@ public class CatchActivity extends Activity {
     }
 
 
+    @SuppressWarnings("deprecation")
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_catch, menu);
         menu.add(Html.fromHtml("<font color='#ffffff'>drakeet</font>"))

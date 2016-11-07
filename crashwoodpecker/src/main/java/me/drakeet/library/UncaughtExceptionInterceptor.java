@@ -34,6 +34,8 @@ public interface UncaughtExceptionInterceptor {
      * Called before this uncaught exception be handled by {@link
      * CrashWoodpecker}.
      *
+     * @param thread the thread
+     * @param throwable the exception
      * @return true if intercepted, which means this event won't be handled
      * by {@link CrashWoodpecker}.
      */
@@ -44,6 +46,8 @@ public interface UncaughtExceptionInterceptor {
      * {@link CrashWoodpecker} (but before {@link CrashWoodpecker}'s
      * parent).
      *
+     * @param thread the thread
+     * @param throwable the exception
      * @return true if intercepted, which means this event won't be handled
      * by {@link CrashWoodpecker}'s parent.
      */
