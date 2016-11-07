@@ -2,7 +2,7 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker)
 
-A nice uncaught exception handler library likes Square's [LeakCanary](https://github.com/square/leakcanary). Support showing logs both on Logcat & Woodpecker.
+A nice and strong uncaught exception handler library, supports showing logs both on `Logcat` & **Woodpecker** and set a `AlertDialog` to help user to download a new stable application.
 
 ![screenshot.png](art/s2.png)
 
@@ -14,7 +14,7 @@ In your `build.gradle`:
 
 ```gradle
 dependencies {
-  compile 'me.drakeet.library:crashwoodpecker:2.0.0'
+  compile 'me.drakeet.library:crashwoodpecker:2.1.0'
 }
 ```
 
@@ -25,9 +25,12 @@ public class ExampleApplication extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    CrashWoodpecker.flyTo(this);
-    // or add more highlight keys except the default package name:
-    // CrashWoodpecker.flyTo(this).withKeys("widget", "me.drakeet");
+    CrashWoodpecker.instance()
+        .withKeys("widget", "me.drakeet")
+        .setPatchMode(patchMode)
+        .setPatchDialogUrlToOpen("https://drakeet.me")
+        .setPassToOriginalDefaultHandler(true)
+        .flyTo(this);
   }
 }
 ```
@@ -49,30 +52,15 @@ And in your `AndroidManifest.xml` file:
 v1.3.0
 
 - Added `withKeys` for more highlight keys
-```java
-// add more highlight keys except the default package name:
-CrashWoodpecker.flyTo(this).withKeys("widget", "me.drakeet");
-```
-- Changed `setInterceptor` to return `CrashWoodpecker` itself
-- Updated android support libs to v24
 
-With multiple keys: packageName(default), "widget", "me.drakeet"
+eg. With multiple keys: packageName(default), "widget", "me.drakeet"
 
 <img src="art/s3.png" height=500 width=280/>
-
-v1.3.1
-
-- Added padding top & bottom to list and improved the selection program
-
-v1.3.2
-
-- Used application name to show in the crash page title
-
 
 ## TODO
 
 * Save logs and to reload.
-* Java doc and source archives.
+* Java doc.
 
 ## Thanks
 
