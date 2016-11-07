@@ -274,7 +274,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     }
 
 
-    public CrashWoodpecker setPatchDialogMessage(@StringRes int messageResId) {
+    public CrashWoodpecker setPatchDialogMessage(int messageResId) {
         this.patchDialogMessage = applicationContext.getString(messageResId);
         return this;
     }

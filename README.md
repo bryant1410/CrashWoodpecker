@@ -2,7 +2,7 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/me.drakeet.library/crashwoodpecker)
 
-A nice and strong uncaught exception handler library, supports showing logs both on `Logcat` & **Woodpecker** and set a `AlertDialog` to help user to download a new stable application.
+A nice and strong uncaught exception handler library, supports showing logs both on `Logcat` & **Woodpecker** and set an `AlertDialog` to help user to download a new stable application.
 
 ![screenshot.png](art/s2.png)
 
@@ -61,6 +61,7 @@ eg. With multiple keys: packageName(default), "widget", "me.drakeet"
 
 * Save logs and to reload.
 * Java doc.
+* targetSdkVersion 23+
 
 ## Thanks
 
