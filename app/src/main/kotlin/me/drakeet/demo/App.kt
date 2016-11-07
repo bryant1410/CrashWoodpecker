@@ -28,6 +28,7 @@ package me.drakeet.demo
 import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import me.drakeet.library.CrashWoodpecker
 import me.drakeet.library.PatchMode
 
@@ -46,10 +47,19 @@ class App : Application() {
             PatchMode.SHOW_DIALOG_TO_OPEN_URL
         }
         if (isMainProcess()) {
-            CrashWoodpecker.flyTo(this)
+            setupOriginalHandler()
+            CrashWoodpecker.instance()
                 .withKeys("widget", "me.drakeet")
                 .setPatchMode(patchMode)
                 .setPatchDialogUrlToOpen("https://drakeet.me")
+                .setPassToOriginalDefaultHandler(true)
+                .flyTo(this)
+        }
+    }
+
+    private fun setupOriginalHandler() {
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            Log.e("CrashSample", "Default-UncaughtExceptionHandler", throwable)
         }
     }
 

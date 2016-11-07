@@ -23,7 +23,8 @@
   ~ SOFTWARE.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ResourceName">
 
     <style name="Theme.Pecker"
         parent="Base.Theme.Pecker">
@@ -33,17 +34,17 @@
     <style name="Base.Theme.Pecker"
         parent="android:Theme.Black"/>
 
-    <style name="Theme.NoTitleBar"
+    <style name="Theme.Pecker.NoTitleBar"
         parent="android:Theme.NoTitleBar"/>
 
-    <style name="Theme.Dialog"
-        parent="Theme.NoTitleBar">
+    <style name="Theme.Pecker.Dialog"
+        parent="Theme.Pecker.NoTitleBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>　
     </style>
 
-    <style name="LineTextAppearance">
+    <style name="CWLineTextAppearance">
         <item name="android:textColor">@color/cw_my_fault</item>
     </style>
 

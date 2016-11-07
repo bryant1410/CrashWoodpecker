@@ -24,6 +24,7 @@
   -->
 
 <resources>
+
     <string name="cw_default_page_name"
         translatable="false">Woodpecker</string>
 
@@ -34,7 +35,7 @@
 
     <string name="cw_action_restart">Restart</string>
     <string name="cw_action_download">Download</string>
-    <string name="cw_error_message">Sorry! There is something wrong with the App. \n\nPlease click <b>DOWNLOAD</b> to download a new stable version, or click RESTART to retry.</string>
+    <string name="cw_error_message">Sorry! There is something wrong with the App. \n\nPlease click <b>DOWNLOAD</b> to download a new stable version, or click RESTART to restart current App and retry.</string>
     <string name="cw_error_title">Error</string>
 
 </resources>

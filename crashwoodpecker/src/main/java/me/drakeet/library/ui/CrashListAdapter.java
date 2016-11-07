@@ -37,8 +37,6 @@ import me.drakeet.library.R;
 import me.drakeet.library.Space;
 import me.drakeet.library.StringStyleUtils;
 
-import static me.drakeet.library.R.id.trace;
-
 /**
  * Created by drakeet(http://drakeet.me)
  * Date: 9/2/15 12:42
@@ -93,7 +91,7 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
                         SpannableStringBuilder builder = new SpannableStringBuilder(
                             atPackage).append(
                             StringStyleUtils.format(holder.title.getContext(),
-                                " " + trace.substring(indexOfC), R.style.LineTextAppearance));
+                                " " + trace.substring(indexOfC), R.style.CWLineTextAppearance));
                         CharSequence title = builder.subSequence(0, builder.length());
                         holder.title.setText(title);
                     } else {
@@ -145,7 +143,7 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
 
         ViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(trace);
+            title = (TextView) itemView.findViewById(R.id.trace);
             space = (Space) itemView.findViewById(R.id.space);
             itemView.setOnClickListener(this);
         }

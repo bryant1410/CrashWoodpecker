@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ The MIT License (MIT)
   ~
   ~ Copyright (c) 2015 drakeet (drakeet.me@gmail.com)
@@ -24,14 +23,13 @@
   ~ SOFTWARE.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ResourceName">
 
     <style name="Base.Theme.Pecker"
-        parent="android:Theme.Holo.Light.DarkActionBar">
-    </style>
+        parent="android:Theme.Holo.Light.DarkActionBar"/>
 
-    <style name="Theme.NoTitleBar"
-        parent="android:Theme.Holo.NoActionBar">
-    </style>
+    <style name="Theme.Pecker.NoTitleBar"
+        parent="android:Theme.Holo.NoActionBar"/>
 
 </resources>
