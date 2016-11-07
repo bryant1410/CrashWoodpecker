@@ -49,6 +49,10 @@ And in your `AndroidManifest.xml` file:
 
 ## Change logs
 
+v2.1.0
+
+https://github.com/drakeet/CrashWoodpecker/releases
+
 v1.3.0
 
 - Added `withKeys` for more highlight keys
