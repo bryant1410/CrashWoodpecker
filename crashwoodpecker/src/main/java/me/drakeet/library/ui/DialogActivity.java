@@ -60,8 +60,13 @@ public class DialogActivity extends Activity {
         new AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(ultimateMessage)
-            .setCancelable(false)
+            .setCancelable(true)
             .setIcon(R.drawable.cw_ic_error)
+            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override public void onCancel(DialogInterface dialog) {
+                    finish();
+                }
+            })
             .setNegativeButton(R.string.cw_action_download, new DialogInterface.OnClickListener() {
                 @Override public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

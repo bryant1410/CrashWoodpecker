@@ -25,7 +25,7 @@
 
 package me.drakeet.library;
 
-import android.app.Application;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -61,114 +61,83 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     /* Default log out time, 7 days. */
     private final static long LOG_OUT_TIME = 7 * 24 * 60 * 60 * 1000;
 
-    /* get DateFormatter for current locale */
+    /* Get DateFormatter for current locale */
     private final static DateFormat FORMATTER = DateFormat.getDateInstance();
     private static final PatchMode DEFAULT_MODE = PatchMode.SHOW_LOG_PAGE;
 
-    private volatile UncaughtExceptionHandler originHandler;
+    private volatile UncaughtExceptionHandler originDefaultHandler;
     private volatile UncaughtExceptionInterceptor interceptor;
-    private volatile boolean crashing = false;
+    private volatile boolean crashing;
 
-    private boolean forceHandleByOrigin = false;
-    private final Context context;
-    private final String version;
-    /* for highlight */
+    private boolean passToOriginalDefaultHandler;
+    private boolean forcePassToOriginalDefaultHandler;
+    private Context applicationContext;
+    private String version;
+    /* For highlight */
     private ArrayList<String> keys;
     private PatchMode mode;
     private String patchDialogTitle;
     private String patchDialogMessage;
     private String patchDialogUrlToOpen;
+    @SuppressLint("StaticFieldLeak")
     private static CrashWoodpecker instance;
 
 
-    /**
-     * Install CrashWoodpecker.
-     *
-     * @param application to capture exceptions for.
-     * @param forceHandleByOrigin whether to force original
-     * UncaughtExceptionHandler handle again,
-     * by default false.
-     * @return CrashWoodpecker instance.
-     */
-    public static CrashWoodpecker flyTo(Application application, boolean forceHandleByOrigin) {
-        if (instance == null) {
-            instance = new CrashWoodpecker(application, forceHandleByOrigin);
-        }
-        return instance;
-    }
-
-
-    /**
-     * Install CrashWoodpecker.
-     *
-     * @param application to capture exceptions for.
-     * @return CrashWoodpecker instance.
-     */
-    public static CrashWoodpecker flyTo(Application application) {
-        if (instance == null) {
-            instance = new CrashWoodpecker(application, false);
-        }
-        return instance;
+    private CrashWoodpecker() {
+        this.passToOriginalDefaultHandler = false;
+        this.crashing = false;
+        this.keys = new ArrayList<>();
+        this.mode = DEFAULT_MODE;
     }
 
 
     public static CrashWoodpecker instance() {
+        if (instance == null) {
+            instance = new CrashWoodpecker();
+        }
         return instance;
     }
 
 
-    /**
-     * Install CrashWoodpecker.
-     *
-     * @param application to capture exceptions for.
-     * @param forceHandleByOrigin whether to force original
-     * UncaughtExceptionHandler handle again,
-     * by default false.
-     * @return CrashWoodpecker instance.
-     * @deprecated use {@link CrashWoodpecker#flyTo(Application, boolean)} instead.
-     */
-    @Deprecated
-    public static CrashWoodpecker init(Application application, boolean forceHandleByOrigin) {
-        return flyTo(application, forceHandleByOrigin);
+    public void flyTo(Context context) {
+        this.applicationContext = context.getApplicationContext();
+        initContextResources();
+        turnOnHandler();
     }
 
 
-    /**
-     * Install CrashWoodpecker.
-     *
-     * @param application to capture exceptions for.
-     * @return CrashWoodpecker instance.
-     * @deprecated use {@link CrashWoodpecker#flyTo(Application)} instead.
-     */
-    @Deprecated
-    public static CrashWoodpecker init(Application application) {
-        return flyTo(application, false);
+    public UncaughtExceptionHandler getHandler(Context context) {
+        this.applicationContext = context.getApplicationContext();
+        initContextResources();
+        return this;
     }
 
 
-    private CrashWoodpecker(Context context, boolean forceHandleByOrigin) {
-        this.context = context;
-        this.forceHandleByOrigin = forceHandleByOrigin;
-        this.keys = new ArrayList<>();
-        this.keys.add(this.context.getPackageName());
-        this.mode = DEFAULT_MODE;
-
+    private void initContextResources() {
+        this.keys.add(this.applicationContext.getPackageName());
         try {
-            PackageInfo info = context.getPackageManager()
-                .getPackageInfo(context.getPackageName(), 0);
+            PackageInfo info = applicationContext.getPackageManager()
+                .getPackageInfo(applicationContext.getPackageName(), 0);
             version = info.versionName + "(" + info.versionCode + ")";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
-        UncaughtExceptionHandler originHandler = Thread.currentThread()
-            .getUncaughtExceptionHandler();
-        // check to prevent set again
-        if (this != originHandler) {
-            this.originHandler = originHandler;
-            Thread.currentThread().setUncaughtExceptionHandler(this);
+
+    private void turnOnHandler() {
+        UncaughtExceptionHandler originDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+
+        if (this != originDefaultHandler) {
+            this.originDefaultHandler = originDefaultHandler;
             Thread.setDefaultUncaughtExceptionHandler(this);
         }
+    }
+
+
+    public CrashWoodpecker setPassToOriginalDefaultHandler(boolean passToOriginalDefaultHandler) {
+        this.passToOriginalDefaultHandler = passToOriginalDefaultHandler;
+        return this;
     }
 
 
@@ -177,7 +146,6 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         try {
             if (mode == PatchMode.SHOW_LOG_PAGE) {
                 startCatchActivity(throwable);
-                byeByeLittleWood();
             } else if (mode == PatchMode.SHOW_DIALOG_TO_OPEN_URL) {
                 showPatchDialog();
             }
@@ -189,45 +157,42 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
 
     private void showPatchDialog() {
-        Intent intent = DialogActivity.newIntent(context,
-            patchDialogTitle, patchDialogMessage, patchDialogUrlToOpen);
-        context.startActivity(intent);
-        byeByeLittleWood();
-    }
-
-
-    private void byeByeLittleWood() {
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
+        Intent intent = DialogActivity.newIntent(
+            applicationContext,
+            getApplicationName(applicationContext),
+            patchDialogMessage,
+            patchDialogUrlToOpen);
+        applicationContext.startActivity(intent);
     }
 
 
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
-        // Don't re-enter,  avoid infinite loops if crash-handler crashes.
+        // Don't re-enter, avoid infinite loops if crash-handler crashes.
         if (crashing) {
             return;
         }
         crashing = true;
 
-        // pass it to interceptor's before method
-        UncaughtExceptionInterceptor interceptor = this.interceptor;
-        if (interceptor != null &&
-            interceptor.onInterceptExceptionBefore(thread, throwable)) {
+        final UncaughtExceptionInterceptor interceptor = this.interceptor;
+        // Pass it to interceptor's before method.
+        if (interceptor != null && interceptor.onBeforeHandlingException(thread, throwable)) {
             return;
         }
 
-        boolean isHandle = handleException(throwable);
+        boolean success = handleException(throwable);
 
-        // pass it to interceptor's after method
-        if (interceptor != null &&
-            interceptor.onInterceptExceptionAfter(thread, throwable)) {
+        // Pass it to interceptor's after method.
+        if (interceptor != null && interceptor.onAfterHandlingException(thread, throwable)) {
             return;
         }
 
-        if ((forceHandleByOrigin || !isHandle) && originHandler != null) {
-            originHandler.uncaughtException(thread, throwable);
+        if (passToOriginalDefaultHandler || !success) {
+            if (originDefaultHandler != null) {
+                originDefaultHandler.uncaughtException(thread, throwable);
+            }
         }
+        byeByeLittleWood();
     }
 
 
@@ -255,6 +220,12 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     }
 
 
+    private void byeByeLittleWood() {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
+
+
     /**
      * Delete outmoded logs.
      */
@@ -263,42 +234,10 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     }
 
 
-    /**
-     * Delete outmoded logs.
-     *
-     * @param timeout outmoded timeout.
-     */
-    public void deleteLogs(final long timeout) {
-        final File logDir = new File(getCrashDir());
-        try {
-            final long currTime = System.currentTimeMillis();
-            File[] files = logDir.listFiles(new FilenameFilter() {
-                @Override public boolean accept(File dir, String filename) {
-                    File file = new File(dir, filename);
-                    return currTime - file.lastModified() > timeout;
-                }
-            });
-            if (files != null) {
-                for (File file : files) {
-                    FileUtils.delete(file);
-                }
-            }
-        } catch (Exception e) {
-            Log.v(TAG, "Exception occurs when deleting outmoded logs", e);
-        }
-    }
-
-
-    private String getCrashDir() {
-        String rootPath = Environment.getExternalStorageDirectory().getPath();
-        return rootPath + "/CrashWoodpecker/";
-    }
-
-
     private void startCatchActivity(Throwable throwable) {
         String traces = getStackTrace(throwable);
         Intent intent = new Intent();
-        intent.setClass(context, CatchActivity.class);
+        intent.setClass(applicationContext, CatchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         String[] strings = traces.split("\n");
         String[] logs = new String[strings.length];
@@ -306,10 +245,11 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             logs[i] = strings[i].trim();
         }
         intent.putStringArrayListExtra(CatchActivity.EXTRA_HIGHLIGHT_KEYS, keys);
-        intent.putExtra(CatchActivity.EXTRA_APPLICATION_NAME, getApplicationName(context));
+        intent.putExtra(CatchActivity.EXTRA_APPLICATION_NAME,
+            getApplicationName(applicationContext));
         intent.putExtra(CatchActivity.EXTRA_CRASH_LOGS, logs);
         intent.putExtra(CatchActivity.EXTRA_CRASH_4_LOGCAT, Log.getStackTraceString(throwable));
-        context.startActivity(intent);
+        applicationContext.startActivity(intent);
     }
 
 
@@ -319,6 +259,30 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
         throwable.printStackTrace(printWriter);
         printWriter.close();
         return writer.toString();
+    }
+
+
+    public CrashWoodpecker setPatchMode(PatchMode mode) {
+        this.mode = mode;
+        return this;
+    }
+
+
+    public CrashWoodpecker setPatchDialogMessage(String message) {
+        this.patchDialogMessage = message;
+        return this;
+    }
+
+
+    public CrashWoodpecker setPatchDialogMessage(@StringRes int messageResId) {
+        this.patchDialogMessage = applicationContext.getString(messageResId);
+        return this;
+    }
+
+
+    public CrashWoodpecker setPatchDialogUrlToOpen(String url) {
+        this.patchDialogUrlToOpen = url;
+        return this;
     }
 
 
@@ -361,39 +325,35 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     }
 
 
-    public CrashWoodpecker setPatchMode(PatchMode mode) {
-        this.mode = mode;
-        return this;
+    /**
+     * Delete outmoded logs.
+     *
+     * @param timeout outmoded timeout.
+     */
+    public void deleteLogs(final long timeout) {
+        final File logDir = new File(getCrashDir());
+        try {
+            final long currTime = System.currentTimeMillis();
+            File[] files = logDir.listFiles(new FilenameFilter() {
+                @Override public boolean accept(File dir, String filename) {
+                    File file = new File(dir, filename);
+                    return currTime - file.lastModified() > timeout;
+                }
+            });
+            if (files != null) {
+                for (File file : files) {
+                    FileUtils.delete(file);
+                }
+            }
+        } catch (Exception e) {
+            Log.v(TAG, "Exception occurs when deleting outmoded logs", e);
+        }
     }
 
 
-    public CrashWoodpecker setPatchDialogTitle(String title) {
-        this.patchDialogTitle = title;
-        return this;
-    }
-
-
-    public CrashWoodpecker setPatchDialogTitle(@StringRes int titleResId) {
-        this.patchDialogTitle = context.getString(titleResId);
-        return this;
-    }
-
-
-    public CrashWoodpecker setPatchDialogMessage(String message) {
-        this.patchDialogMessage = message;
-        return this;
-    }
-
-
-    public CrashWoodpecker setPatchDialogMessage(@StringRes int messageResId) {
-        this.patchDialogMessage = context.getString(messageResId);
-        return this;
-    }
-
-
-    public CrashWoodpecker setPatchDialogUrlToOpen(String url) {
-        this.patchDialogUrlToOpen = url;
-        return this;
+    private String getCrashDir() {
+        String rootPath = Environment.getExternalStorageDirectory().getPath();
+        return rootPath + "/CrashWoodpecker/";
     }
 
 
@@ -410,27 +370,5 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
             name = packages[packages.length - 1];
         }
         return name;
-    }
-
-
-    public interface UncaughtExceptionInterceptor {
-        /**
-         * Called before this uncaught exception be handled by {@link
-         * CrashWoodpecker}.
-         *
-         * @return true if intercepted, which means this event won't be handled
-         * by {@link CrashWoodpecker}.
-         */
-        boolean onInterceptExceptionBefore(Thread t, Throwable ex);
-
-        /**
-         * Called after this uncaught exception be handled by
-         * {@link CrashWoodpecker} (but before {@link CrashWoodpecker}'s
-         * parent).
-         *
-         * @return true if intercepted, which means this event won't be handled
-         * by {@link CrashWoodpecker}'s parent.
-         */
-        boolean onInterceptExceptionAfter(Thread t, Throwable ex);
     }
 }

@@ -93,7 +93,7 @@ class CrashListAdapter extends RecyclerView.Adapter<CrashListAdapter.ViewHolder>
                         SpannableStringBuilder builder = new SpannableStringBuilder(
                             atPackage).append(
                             StringStyleUtils.format(holder.title.getContext(),
-                                " " + trace.substring(indexOfC), R.style.LineTextAppearance));
+                                " " + trace.substring(indexOfC), R.style.CWLineTextAppearance));
                         CharSequence title = builder.subSequence(0, builder.length());
                         holder.title.setText(title);
                     } else {
