@@ -53,7 +53,7 @@ v2.1.0
 
 https://github.com/drakeet/CrashWoodpecker/releases
 
-<img src="art/screenshot-patch-dialog.png" height=500 width=280/>
+<img src="art/screenshot-patch-dialog.png" height=500 width=280/> <img src="art/screenshot-patch-dialog-cn.png" height=500 width=280/>
 
 v1.3.0
 
