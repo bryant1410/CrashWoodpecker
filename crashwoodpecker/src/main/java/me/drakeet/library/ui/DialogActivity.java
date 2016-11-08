@@ -95,7 +95,7 @@ public class DialogActivity extends Activity {
 
 
     @Override public void finish() {
-        overridePendingTransition(0, 0);
         super.finish();
+        overridePendingTransition(0, 0);
     }
 }
