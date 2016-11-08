@@ -14,7 +14,7 @@ In your `build.gradle`:
 
 ```gradle
 dependencies {
-  compile 'me.drakeet.library:crashwoodpecker:2.1.0'
+  compile 'me.drakeet.library:crashwoodpecker:2.1.1'
 }
 ```
 
@@ -25,14 +25,12 @@ public class ExampleApplication extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    if (ProcessUtils.isMainProcess(this)) {
-        CrashWoodpecker.instance()
-            .withKeys("widget", "me.drakeet")
-            .setPatchMode(PatchMode.SHOW_LOG_PAGE)
-            .setPatchDialogUrlToOpen("https://drakeet.me")
-            .setPassToOriginalDefaultHandler(true)
-            .flyTo(this);
-    }
+    CrashWoodpecker.instance()
+        .withKeys("widget", "me.drakeet")
+        .setPatchMode(PatchMode.SHOW_LOG_PAGE)
+        .setPatchDialogUrlToOpen("https://drakeet.me")
+        .setPassToOriginalDefaultHandler(true)
+        .flyTo(this);
   }
 }
 ```
