@@ -47,7 +47,7 @@ class App : Application() {
         setupOriginalHandler()
         CrashWoodpecker.instance()
             .withKeys("widget", "me.drakeet")
-            .setPatchMode(PatchMode.SHOW_DIALOG_TO_OPEN_URL)    // TODO
+            .setPatchMode(patchMode)
             .setPatchDialogUrlToOpen("https://drakeet.me")
             .setPassToOriginalDefaultHandler(true)
             .flyTo(this)

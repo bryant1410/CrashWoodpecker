@@ -43,8 +43,6 @@ class MainActivity : AppCompatActivity() {
     val KEY_IS_DIALOG_MODE = "key_is_log_mode";
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        throw RuntimeException()
-
         super.onCreate(savedInstanceState)
 
         val preferences = getSharedPreferences("CrashWoodpecker-Sample", Context.MODE_PRIVATE)
