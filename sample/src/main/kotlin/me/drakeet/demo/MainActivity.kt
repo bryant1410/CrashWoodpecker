@@ -67,10 +67,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchPatchMode(patchModeSwitch: Switch, checked: Boolean) {
+        if (checked != patchModeSwitch.isChecked) {
+            patchModeSwitch.isChecked = checked;
+        }
         if (checked) {
             CrashWoodpecker.instance().setPatchMode(PatchMode.SHOW_DIALOG_TO_OPEN_URL);
             patchModeSwitch.text = "Patch Mode: dialog mode"
-
         } else {
             CrashWoodpecker.instance().setPatchMode(PatchMode.SHOW_LOG_PAGE);
             patchModeSwitch.text = "Patch Mode: log mode"

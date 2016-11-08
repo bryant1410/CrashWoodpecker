@@ -25,9 +25,7 @@
 
 package me.drakeet.demo
 
-import android.app.ActivityManager
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import me.drakeet.library.CrashWoodpecker
 import me.drakeet.library.PatchMode
@@ -46,36 +44,20 @@ class App : Application() {
         } else {
             PatchMode.SHOW_DIALOG_TO_OPEN_URL
         }
-        if (isMainProcess()) {
-            setupOriginalHandler()
-            CrashWoodpecker.instance()
-                .withKeys("widget", "me.drakeet")
-                .setPatchMode(patchMode)
-                .setPatchDialogUrlToOpen("https://drakeet.me")
-                .setPassToOriginalDefaultHandler(true)
-                .flyTo(this)
-        }
+        setupOriginalHandler()
+        CrashWoodpecker.instance()
+            .withKeys("widget", "me.drakeet")
+            .setPatchMode(patchMode)
+            .setPatchDialogUrlToOpen("https://drakeet.me")
+            .setPassToOriginalDefaultHandler(true)
+            .flyTo(this)
     }
 
     private fun setupOriginalHandler() {
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             Log.e("CrashSample", "Default-UncaughtExceptionHandler", throwable)
+            android.os.Process.killProcess(android.os.Process.myPid())
+            System.exit(0)
         }
-    }
-
-    private fun isMainProcess(): Boolean {
-        return packageName == getProcessName()
-    }
-
-    private fun getProcessName(): String? {
-        val pid = android.os.Process.myPid()
-        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val processes = manager.runningAppProcesses
-        for (process in processes) {
-            if (process.pid === pid) {
-                return process.processName
-            }
-        }
-        return null
     }
 }

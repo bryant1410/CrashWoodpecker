@@ -1,17 +1,17 @@
 package me.drakeet.library.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import me.drakeet.library.WoodpeckerBaseActivity;
 import me.drakeet.library.R;
 
 import static me.drakeet.library.FileUtils.clearApplicationData;
 
-public class DialogActivity extends Activity {
+public class PatchDialogActivity extends WoodpeckerBaseActivity {
 
     private static final String EXTRA_TITLE = "extra_title";
     private static final String EXTRA_ULTIMATE_MESSAGE = "extra_ultimate_message";
@@ -25,7 +25,7 @@ public class DialogActivity extends Activity {
         Context context, String title, String ultimateMessage, String url) {
 
         Intent intent = new Intent();
-        intent.setClass(context, DialogActivity.class);
+        intent.setClass(context, PatchDialogActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         intent.putExtra(EXTRA_TITLE, title);
@@ -91,6 +91,7 @@ public class DialogActivity extends Activity {
             .getLaunchIntentForPackage(getBaseContext().getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        super.onDestroy();
     }
 
 

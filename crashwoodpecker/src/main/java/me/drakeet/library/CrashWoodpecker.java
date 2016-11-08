@@ -31,13 +31,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -45,9 +39,8 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import me.drakeet.library.ui.CatchActivity;
-import me.drakeet.library.ui.DialogActivity;
+import me.drakeet.library.ui.PatchDialogActivity;
 
 /**
  * Created by drakeet(http://drakeet.me)
@@ -56,9 +49,6 @@ import me.drakeet.library.ui.DialogActivity;
 public class CrashWoodpecker implements UncaughtExceptionHandler {
 
     private final static String TAG = "CrashWoodpecker";
-
-    /* Default log out time, 7 days. */
-    private final static long LOG_OUT_TIME = 7 * 24 * 60 * 60 * 1000;
 
     /* Get DateFormatter for current locale */
     private final static DateFormat FORMATTER = DateFormat.getDateInstance();
@@ -101,7 +91,9 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     public void flyTo(Context context) {
         this.applicationContext = context.getApplicationContext();
         initContextResources();
-        turnOnHandler();
+        if (!Checks.isWoodpeckerRunning(context)) {
+            turnOnHandler();
+        }
     }
 
 
@@ -141,7 +133,6 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
 
 
     private boolean handleException(Throwable throwable) {
-        boolean success = saveToFile(throwable);
         try {
             if (mode == PatchMode.SHOW_LOG_PAGE) {
                 startCatchActivity(throwable);
@@ -149,14 +140,14 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
                 showPatchDialog();
             }
         } catch (Exception e) {
-            success = false;
+            return false;
         }
-        return success;
+        return true;
     }
 
 
     private void showPatchDialog() {
-        Intent intent = DialogActivity.newIntent(
+        Intent intent = PatchDialogActivity.newIntent(
             applicationContext,
             getApplicationName(applicationContext),
             patchDialogMessage,
@@ -225,14 +216,6 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     }
 
 
-    /**
-     * Delete outmoded logs.
-     */
-    public void deleteLogs() {
-        deleteLogs(LOG_OUT_TIME);
-    }
-
-
     private void startCatchActivity(Throwable throwable) {
         String traces = getStackTrace(throwable);
         Intent intent = new Intent();
@@ -285,78 +268,7 @@ public class CrashWoodpecker implements UncaughtExceptionHandler {
     }
 
 
-    private boolean saveToFile(Throwable throwable) {
-        String time = FORMATTER.format(new Date());
-        String fileName = "Crash-" + time + ".log";
-        String crashDir = getCrashDir();
-        String crashPath = crashDir + fileName;
-
-        String androidVersion = Build.VERSION.RELEASE;
-        String deviceModel = Build.MODEL;
-        String manufacturer = Build.MANUFACTURER;
-
-        File file = new File(crashPath);
-        if (file.exists()) {
-            file.delete();
-        } else {
-            try {
-                new File(crashDir).mkdirs();
-                file.createNewFile();
-            } catch (IOException e) {
-                return false;
-            }
-        }
-
-        PrintWriter writer;
-        try {
-            writer = new PrintWriter(file);
-        } catch (FileNotFoundException e) {
-            return false;
-        }
-        writer.write("Device: " + manufacturer + ", " + deviceModel + "\n");
-        writer.write("Android Version: " + androidVersion + "\n");
-        if (version != null) writer.write("App Version: " + version + "\n");
-        writer.write("---------------------\n\n");
-        throwable.printStackTrace(writer);
-        writer.close();
-
-        return true;
-    }
-
-
-    /**
-     * Delete outmoded logs.
-     *
-     * @param timeout outmoded timeout.
-     */
-    public void deleteLogs(final long timeout) {
-        final File logDir = new File(getCrashDir());
-        try {
-            final long currTime = System.currentTimeMillis();
-            File[] files = logDir.listFiles(new FilenameFilter() {
-                @Override public boolean accept(File dir, String filename) {
-                    File file = new File(dir, filename);
-                    return currTime - file.lastModified() > timeout;
-                }
-            });
-            if (files != null) {
-                for (File file : files) {
-                    FileUtils.delete(file);
-                }
-            }
-        } catch (Exception e) {
-            Log.v(TAG, "Exception occurs when deleting outmoded logs", e);
-        }
-    }
-
-
-    private String getCrashDir() {
-        String rootPath = Environment.getExternalStorageDirectory().getPath();
-        return rootPath + "/CrashWoodpecker/";
-    }
-
-
-    public String getApplicationName(Context context) {
+    private String getApplicationName(Context context) {
         PackageManager packageManager = context.getPackageManager();
         ApplicationInfo applicationInfo = null;
         String name = null;
