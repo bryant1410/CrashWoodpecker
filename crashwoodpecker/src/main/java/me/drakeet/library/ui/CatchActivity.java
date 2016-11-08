@@ -25,7 +25,6 @@
 
 package me.drakeet.library.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,12 +37,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import java.util.ArrayList;
 import me.drakeet.library.R;
+import me.drakeet.library.WoodpeckerBaseActivity;
 
 /**
  * Created by drakeet(http://drakeet.me)
  * Date: 8/31/15 22:42
  */
-public class CatchActivity extends Activity {
+public class CatchActivity extends WoodpeckerBaseActivity {
 
     public final static String EXTRA_CRASH_LOGS = "extra_crash_logs";
     public final static String EXTRA_CRASH_4_LOGCAT = "extra_crash_4_logcat";

@@ -25,21 +25,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.drakeet.library">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
     <application>
         <activity
             android:name=".ui.CatchActivity"
             android:label="@string/cw_default_page_name"
             android:process=":woodpecker"
-            android:taskAffinity="me.drakeet.library"
             android:theme="@style/Theme.Pecker"/>
 
         <activity
-            android:name=".ui.DialogActivity"
+            android:name=".ui.PatchDialogActivity"
             android:label="@string/cw_default_page_name"
             android:process=":woodpecker"
-            android:taskAffinity="me.drakeet.library"
             android:theme="@style/Theme.Pecker.Dialog"/>
     </application>
 

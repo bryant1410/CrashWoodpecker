@@ -1,1 +1,1 @@
-include ':app', ':crashwoodpecker'
+include ':sample', ':crashwoodpecker'

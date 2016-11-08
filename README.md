@@ -25,12 +25,14 @@ public class ExampleApplication extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    CrashWoodpecker.instance()
-        .withKeys("widget", "me.drakeet")
-        .setPatchMode(patchMode)
-        .setPatchDialogUrlToOpen("https://drakeet.me")
-        .setPassToOriginalDefaultHandler(true)
-        .flyTo(this);
+    if (ProcessUtils.isMainProcess(this)) {
+        CrashWoodpecker.instance()
+            .withKeys("widget", "me.drakeet")
+            .setPatchMode(PatchMode.SHOW_LOG_PAGE)
+            .setPatchDialogUrlToOpen("https://drakeet.me")
+            .setPassToOriginalDefaultHandler(true)
+            .flyTo(this);
+    }
   }
 }
 ```
@@ -67,7 +69,6 @@ eg. With multiple keys: packageName(default), "widget", "me.drakeet"
 
 * Save logs and to reload.
 * Java doc.
-* targetSdkVersion 23+
 
 ## Thanks
 
